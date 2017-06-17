@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MovieDB</string>
+    <string name="action_popular">Most Popular</string>
+    <string name="action_rate">Highest Rated</string>
+
+    <string name="sample_overview">A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground \"fight clubs\" forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion.</string>
+    <string name="movie_overview">OVERVIEW</string>
+</resources>
