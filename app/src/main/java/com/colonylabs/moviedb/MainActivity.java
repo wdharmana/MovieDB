@@ -1,6 +1,7 @@
 package com.colonylabs.moviedb;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -45,7 +46,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Clic
 
         mAdapter = new MovieAdapter(this);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager gridLayoutManager;
+
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            gridLayoutManager = new GridLayoutManager(this, 2);
+        } else {
+            gridLayoutManager = new GridLayoutManager(this, 4);
+        }
+
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         rv.setLayoutManager(gridLayoutManager);
 
@@ -149,4 +157,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Clic
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
 }
