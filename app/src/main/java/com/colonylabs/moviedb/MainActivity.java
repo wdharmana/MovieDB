@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Clic
         mManager = new RestManager();
         fetchMovie(sortBy);
 
+
         rv.setAdapter(mAdapter);
     }
 
