@@ -5,4 +5,10 @@
 
     <string name="sample_overview">A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground \"fight clubs\" forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion.</string>
     <string name="movie_overview">OVERVIEW</string>
+    <string name="trailers">Trailers</string>
+    <string name="text_reviews">Reviews</string>
+    <string name="favorite">Favorite</string>
+    <string name="action_share">Share</string>
+    <string name="action_unfav">Remove Favorite</string>
+    <string name="action_fav">Mark As Favorite</string>
 </resources>

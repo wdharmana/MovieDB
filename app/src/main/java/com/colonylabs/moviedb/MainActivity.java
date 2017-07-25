@@ -1,6 +1,8 @@
 package com.colonylabs.moviedb;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 
 import com.colonylabs.moviedb.adapter.MovieAdapter;
 import com.colonylabs.moviedb.controller.RestManager;
+import com.colonylabs.moviedb.database.FavoriteContract;
 import com.colonylabs.moviedb.models.Base;
 import com.colonylabs.moviedb.models.Result;
 import com.colonylabs.moviedb.utils.Constant;
@@ -26,6 +29,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.ClickListener {
 
+    private static final String EXTRA_SORT_BY = "EXTRA_SORT_BY";
     private RecyclerView rv;
     private String sortBy = "popular";
     private RestManager mManager;
@@ -45,18 +49,46 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Clic
 
         mAdapter = new MovieAdapter(this);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager gridLayoutManager;
+
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            gridLayoutManager = new GridLayoutManager(this, 2);
+        } else {
+            gridLayoutManager = new GridLayoutManager(this, 4);
+        }
+
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         rv.setLayoutManager(gridLayoutManager);
 
         mManager = new RestManager();
-        fetchMovie(sortBy);
+
+        if (savedInstanceState != null) {
+            if (savedInstanceState.getString(EXTRA_SORT_BY) != null) {
+                sortBy = savedInstanceState.getString(EXTRA_SORT_BY);
+                fetchMovie(sortBy);
+            }
+
+        } else {
+            sortBy = "popular";
+            fetchMovie(sortBy);
+        }
+
+
 
         rv.setAdapter(mAdapter);
     }
 
 
     private void fetchMovie(String sortBy) {
+        if (sortBy.equals("favorite")) {
+            loadFavorite();
+        } else {
+            loadMovie(sortBy);
+        }
+
+    }
+
+    private void loadMovie(String sortBy) {
 
         if (getNetworkAvailability()) {
 
@@ -119,6 +151,45 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Clic
 
     }
 
+
+    private Cursor getFavorite() {
+        Cursor favoriteCursor = getContentResolver().query(
+                FavoriteContract.FavoriteEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null);
+
+        return favoriteCursor;
+    }
+
+    private void loadFavorite() {
+
+        rv.setVisibility(View.INVISIBLE);
+        llProgressBar.setVisibility(View.VISIBLE);
+
+        mAdapter.clearItem();
+
+        Cursor favData = getFavorite();
+
+        while (favData.moveToNext()) {
+            Integer movieId = favData.getInt(favData.getColumnIndex(FavoriteContract.FavoriteEntry._ID));
+            String posterPath = favData.getString(favData.getColumnIndex(FavoriteContract.FavoriteEntry.COLUMN_POSTER));
+
+            Result movie = new Result();
+            movie.setId(movieId);
+            movie.setPosterPath(posterPath);
+
+            mAdapter.addItem(movie);
+        }
+
+        mAdapter.notifyDataSetChanged();
+
+        rv.setVisibility(View.VISIBLE);
+        llProgressBar.setVisibility(View.GONE);
+
+    }
+
     public boolean getNetworkAvailability() {
         return Utils.isNetworkAvailable(getApplicationContext());
     }
@@ -146,7 +217,25 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Clic
         } else if (id == R.id.action_rate) {
             sortBy = "rate";
             fetchMovie(sortBy);
+        } else if (id == R.id.action_favorite) {
+            sortBy = "favorite";
+            fetchMovie(sortBy);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString(EXTRA_SORT_BY, sortBy);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (sortBy.equals("favorite")) {
+            fetchMovie(sortBy);
+        }
     }
 }
