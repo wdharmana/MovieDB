@@ -16,8 +16,9 @@ import android.util.Log;
 
 public class FavoriteProvider extends ContentProvider {
 
-    public static final int FAVORITES = 100;
-    public static final int FAVORITES_WITH_ID = 101;
+
+    public static final int FAVORITES = 10;
+    public static final int FAVORITES_WITH_ID = 20;
     private static final UriMatcher uriMatcher = buildUriMatcher();
     private static final String TAG = FavoriteProvider.class.getSimpleName();
     private FavoriteDBHelper dbHelper;
