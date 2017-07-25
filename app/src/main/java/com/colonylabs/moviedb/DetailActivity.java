@@ -1,6 +1,5 @@
 package com.colonylabs.moviedb;
 
-import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -36,6 +35,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,18 +44,30 @@ import retrofit2.Response;
 public class DetailActivity extends AppCompatActivity implements VideoAdapter.ClickListener {
 
     String posterPath;
+    @BindView(R.id.imgPoster)
     ImageView imgPoster;
-    TextView txtTitle, txtRelease, txtOverview, txtRate;
-    LinearLayout llMain, llProgressBar;
+    @BindView(R.id.txtTitle)
+    TextView txtTitle;
+    @BindView(R.id.txtRelease)
+    TextView txtRelease;
+    @BindView(R.id.txtOverview)
+    TextView txtOverview;
+    @BindView(R.id.txtRate)
+    TextView txtRate;
+    @BindView(R.id.llMain)
+    LinearLayout llMain;
+    @BindView(R.id.llProgressBar)
+    LinearLayout llProgressBar;
+    @BindView(R.id.rvVideo)
+    RecyclerView rvVideo;
+    @BindView(R.id.rvReview)
+    RecyclerView rvReview;
+    @BindView(R.id.btnFavorite)
+    Button btnFavorite;
     private RestManager mManager;
-    private ProgressDialog mDialog;
     private Movie selectedMovie;
     private VideoAdapter videoAdapter;
     private ReviewAdapter reviewAdapter;
-
-    private RecyclerView rvVideo, rvReview;
-    private Button btnFavorite;
-
     private Intent curIntent;
     private boolean showMenu = true;
 
@@ -62,21 +75,7 @@ public class DetailActivity extends AppCompatActivity implements VideoAdapter.Cl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
-
-        imgPoster = (ImageView) findViewById(R.id.imgPoster);
-        txtTitle = (TextView) findViewById(R.id.txtTitle);
-        txtRelease = (TextView) findViewById(R.id.txtRelease);
-        txtRate = (TextView) findViewById(R.id.txtRate);
-        txtOverview = (TextView) findViewById(R.id.txtOverview);
-
-        llMain = (LinearLayout) findViewById(R.id.llMain);
-        llProgressBar = (LinearLayout) findViewById(R.id.llProgressBar);
-
-        rvVideo = (RecyclerView) findViewById(R.id.rvVideo);
-        rvReview = (RecyclerView) findViewById(R.id.rvReview);
-
-        btnFavorite = (Button) findViewById(R.id.btnFavorite);
+        ButterKnife.bind(this);
 
         llMain.setVisibility(View.INVISIBLE);
 
@@ -137,9 +136,11 @@ public class DetailActivity extends AppCompatActivity implements VideoAdapter.Cl
         if (isFavorite()) {
             btnFavorite.setText(R.string.action_unfav);
             btnFavorite.setBackgroundColor(getResources().getColor(R.color.colorRed));
+            Toast.makeText(getApplicationContext(), "Movie removed from favorites", Toast.LENGTH_LONG).show();
         } else {
             btnFavorite.setText(R.string.action_fav);
             btnFavorite.setBackgroundColor(getResources().getColor(R.color.colorGreen));
+            Toast.makeText(getApplicationContext(), "Movie added to favorites", Toast.LENGTH_LONG).show();
         }
     }
 
