@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Clic
                         Base resp = response.body();
                         List<Result> results = resp.getResults();
                         mAdapter.clearItem();
+                        movies.clear();
                         for (int i = 0; i < results.size(); i++) {
                             mAdapter.addItem(results.get(i));
                             movies.add(results.get(i));
