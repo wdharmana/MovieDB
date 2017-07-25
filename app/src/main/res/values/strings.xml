@@ -7,4 +7,8 @@
     <string name="movie_overview">OVERVIEW</string>
     <string name="trailers">Trailers</string>
     <string name="text_reviews">Reviews</string>
+    <string name="favorite">Favorite</string>
+    <string name="action_share">Share</string>
+    <string name="action_unfav">Remove Favorite</string>
+    <string name="action_fav">Mark As Favorite</string>
 </resources>

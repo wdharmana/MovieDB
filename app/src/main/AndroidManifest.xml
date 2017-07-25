@@ -20,9 +20,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:label="Movie Detail"
-            android:name=".DetailActivity">
+            android:name=".DetailActivity"
+            android:label="Movie Detail">
         </activity>
+
+        <provider
+            android:name=".database.FavoriteProvider"
+            android:authorities="com.colonylabs.moviedb"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

@@ -54,7 +54,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
     public void onBindViewHolder(MovieHolder holder, int position) {
         String imageBaseUrl = Constant.MOVIE_IMAGE_BASE_URL;
         Context context = holder.imgPoster.getContext();
-        Picasso.with(context).load(imageBaseUrl + movieList.get(position).getPosterPath()).into(holder.imgPoster);
+        Picasso.with(context)
+                .load(imageBaseUrl + movieList.get(position).getPosterPath())
+                .error(R.drawable.placeholder)
+                .placeholder(R.drawable.placeholder)
+                .into(holder.imgPoster);
     }
 
     @Override

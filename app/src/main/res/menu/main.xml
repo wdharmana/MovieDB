@@ -14,4 +14,10 @@
         android:title="@string/action_rate"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/action_favorite"
+        android:orderInCategory="3"
+        android:title="@string/favorite"
+        app:showAsAction="never"/>
+
 </menu>

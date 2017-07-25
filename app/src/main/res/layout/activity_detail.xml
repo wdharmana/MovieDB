@@ -72,6 +72,19 @@
                         android:textColor="@color/white"
                         android:textStyle="bold"/>
 
+                    <Button
+                        android:id="@+id/btnFavorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@color/colorGreen"
+                        android:paddingLeft="16sp"
+                        android:paddingRight="16sp"
+                        android:text="Mark As Favorite"
+                        android:textColor="@android:color/white"
+                        android:textSize="11sp"
+                        android:visibility="gone"/>
+
                 </LinearLayout>
 
 
