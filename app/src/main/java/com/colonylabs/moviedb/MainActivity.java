@@ -34,7 +34,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Clic
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String EXTRA_SORT_BY = "EXTRA_SORT_BY";
     private static final String EXTRA_DATA = "EXTRA_DATA";
-    private static final String EXTRA_LAYOUT_MANAGER = "EXTRA_LAYOUT_MANAGER";
+    private static final String EXTRA_POSITION = "EXTRA_POSITION";
+    private static Bundle mBundleRecyclerViewState;
+    private final String KEY_RECYCLER_STATE = "recycler_state";
+    private Parcelable mListState = null;
 
     private RecyclerView rv;
     private String sortBy = "popular";
@@ -79,10 +82,25 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Clic
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        mBundleRecyclerViewState = new Bundle();
+        mListState = rv.getLayoutManager().onSaveInstanceState();
+        mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, mListState);
+
+
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
 
         super.onSaveInstanceState(outState);
 
+        GridLayoutManager layoutManager = ((GridLayoutManager) rv.getLayoutManager());
+        int firstVisiblePosition = layoutManager.findFirstVisibleItemPosition();
+
+        outState.putInt(EXTRA_POSITION, firstVisiblePosition);
         outState.putString(EXTRA_SORT_BY, sortBy);
         outState.putParcelableArrayList(EXTRA_DATA, movies);
 
@@ -94,12 +112,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Clic
 
         movies = savedInstanceState.getParcelableArrayList(EXTRA_DATA);
         sortBy = savedInstanceState.getString(EXTRA_SORT_BY);
+        int pos = savedInstanceState.getInt(EXTRA_POSITION);
         mAdapter.clearItem();
         mAdapter.setData(movies);
         mAdapter.notifyDataSetChanged();
         setLayoutManager();
         rv.setLayoutManager(gridLayoutManager);
         rv.setAdapter(mAdapter);
+        rv.scrollToPosition(pos);
 
     }
 
@@ -152,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Clic
                             movies.add(results.get(i));
                         }
                         mAdapter.notifyDataSetChanged();
+                        rv.scrollToPosition(0);
 
                     } else {
 
